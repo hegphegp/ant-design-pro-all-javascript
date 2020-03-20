@@ -8,7 +8,14 @@ import LoginSubmit from './LoginSubmit';
 import LoginTab from './LoginTab';
 import styles from './index.less';
 
+import { parse } from 'qs';
+
+function getPageQuery() {
+  return parse(window.location.href.split('?')[1]);
+}
+
 const Login = props => {
+  console.log("url参数===>>>"+JSON.stringify(getPageQuery()));
   const { className } = props;
   const [tabs, setTabs] = useState([]);
   const [active, setActive] = useState();
