@@ -1,6 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Upload, Form, message } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import GeographicView from './GeographicView';
@@ -11,9 +10,7 @@ const { Option } = Select; // 头像组件 方便以后独立，增加裁剪之�
 
 const AvatarView = ({ avatar }) => (
   <>
-    <div className={styles.avatar_title}>
-      <FormattedMessage id="accountandsettings.basic.avatar" defaultMessage="Avatar" />
-    </div>
+    <div className={styles.avatar_title}>头像</div>
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
@@ -21,10 +18,7 @@ const AvatarView = ({ avatar }) => (
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />
-          <FormattedMessage
-            id="accountandsettings.basic.change-avatar"
-            defaultMessage="Change avatar"
-          />
+          更换头像
         </Button>
       </div>
     </Upload>
@@ -82,11 +76,7 @@ class BaseView extends Component {
   };
 
   handleFinish = () => {
-    message.success(
-      formatMessage({
-        id: 'accountandsettings.basic.update.success',
-      }),
-    );
+    message.success('更新基本信息成功');
   };
 
   render() {
@@ -102,18 +92,11 @@ class BaseView extends Component {
           >
             <Form.Item
               name="email"
-              label={formatMessage({
-                id: 'accountandsettings.basic.email',
-              })}
+              label="邮箱"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.email-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的邮箱!',
                 },
               ]}
             >
@@ -121,18 +104,11 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item
               name="name"
-              label={formatMessage({
-                id: 'accountandsettings.basic.nickname',
-              })}
+              label="昵称"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.nickname-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的昵称!',
                 },
               ]}
             >
@@ -140,42 +116,23 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item
               name="profile"
-              label={formatMessage({
-                id: 'accountandsettings.basic.profile',
-              })}
+              label="个人简介"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.profile-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入个人简介!',
                 },
               ]}
             >
-              <Input.TextArea
-                placeholder={formatMessage({
-                  id: 'accountandsettings.basic.profile-placeholder',
-                })}
-                rows={4}
-              />
+              <Input.TextArea placeholder="个人简介" rows={4} />
             </Form.Item>
             <Form.Item
               name="country"
-              label={formatMessage({
-                id: 'accountandsettings.basic.country',
-              })}
+              label="国家/地区"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.country-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的国家或地区!',
                 },
               ]}
             >
@@ -189,18 +146,11 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item
               name="geographic"
-              label={formatMessage({
-                id: 'accountandsettings.basic.geographic',
-              })}
+              label="所在省市"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.geographic-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的所在省市!',
                 },
                 {
                   validator: validatorGeographic,
@@ -211,18 +161,11 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item
               name="address"
-              label={formatMessage({
-                id: 'accountandsettings.basic.address',
-              })}
+              label="街道地址"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.address-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的街道地址!',
                 },
               ]}
             >
@@ -230,18 +173,11 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item
               name="phone"
-              label={formatMessage({
-                id: 'accountandsettings.basic.phone',
-              })}
+              label="联系电话"
               rules={[
                 {
                   required: true,
-                  message: formatMessage(
-                    {
-                      id: 'accountandsettings.basic.phone-message',
-                    },
-                    {},
-                  ),
+                  message: '请输入您的联系电话!',
                 },
                 {
                   validator: validatorPhone,
@@ -252,10 +188,7 @@ class BaseView extends Component {
             </Form.Item>
             <Form.Item>
               <Button htmlType="submit" type="primary">
-                <FormattedMessage
-                  id="accountandsettings.basic.update"
-                  defaultMessage="Update Information"
-                />
+                更新基本信息
               </Button>
             </Form.Item>
           </Form>

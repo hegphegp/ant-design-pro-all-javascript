@@ -95,19 +95,19 @@ export default {
               redirect: '/user/login',
             },
             {
-              name: 'login',
+              name: '登录',
               icon: 'smile',
               path: '/user/login',
               component: './user/login',
             },
             {
-              name: 'register-result',
+              name: '注册结果',
               icon: 'smile',
               path: '/user/register-result',
               component: './user/register-result',
             },
             {
-              name: 'register',
+              name: '注册',
               icon: 'smile',
               path: '/user/register',
               component: './user/register',
@@ -125,23 +125,23 @@ export default {
           routes: [
             {
               path: '/dashboard',
-              name: 'dashboard',
+              name: '面板',
               icon: 'dashboard',
               routes: [
                 {
-                  name: 'analysis',
+                  name: '分析页',
                   icon: 'smile',
                   path: '/dashboard/analysis',
                   component: './dashboard/analysis',
                 },
                 {
-                  name: 'monitor',
+                  name: '监控页',
                   icon: 'smile',
                   path: '/dashboard/monitor',
                   component: './dashboard/monitor',
                 },
                 {
-                  name: 'workplace',
+                  name: '工作台',
                   icon: 'smile',
                   path: '/dashboard/workplace',
                   component: './dashboard/workplace',
@@ -151,22 +151,22 @@ export default {
             {
               path: '/form',
               icon: 'form',
-              name: 'form',
+              name: '表单页',
               routes: [
                 {
-                  name: 'basic-form',
+                  name: '基础表单',
                   icon: 'smile',
                   path: '/form/basic-form',
                   component: './form/basic-form',
                 },
                 {
-                  name: 'step-form',
+                  name: '分步表单',
                   icon: 'smile',
                   path: '/form/step-form',
                   component: './form/step-form',
                 },
                 {
-                  name: 'advanced-form',
+                  name: '高级表单',
                   icon: 'smile',
                   path: '/form/advanced-form',
                   component: './form/advanced-form',
@@ -176,11 +176,11 @@ export default {
             {
               path: '/list',
               icon: 'table',
-              name: 'list',
+              name: '列表页',
               routes: [
                 {
                   path: '/list/search',
-                  name: 'search-list',
+                  name: '搜索列表',
                   component: './list/search',
                   routes: [
                     {
@@ -188,19 +188,19 @@ export default {
                       redirect: '/list/search/articles',
                     },
                     {
-                      name: 'articles',
+                      name: '搜索列表（文章）',
                       icon: 'smile',
                       path: '/list/search/articles',
                       component: './list/search/articles',
                     },
                     {
-                      name: 'projects',
+                      name: '搜索列表（项目）',
                       icon: 'smile',
                       path: '/list/search/projects',
                       component: './list/search/projects',
                     },
                     {
-                      name: 'applications',
+                      name: '搜索列表（应用）',
                       icon: 'smile',
                       path: '/list/search/applications',
                       component: './list/search/applications',
@@ -208,19 +208,19 @@ export default {
                   ],
                 },
                 {
-                  name: 'table-list',
+                  name: '查询表格',
                   icon: 'smile',
                   path: '/list/table-list',
                   component: './list/table-list',
                 },
                 {
-                  name: 'basic-list',
+                  name: '标准列表',
                   icon: 'smile',
                   path: '/list/basic-list',
                   component: './list/basic-list',
                 },
                 {
-                  name: 'card-list',
+                  name: '卡片列表',
                   icon: 'smile',
                   path: '/list/card-list',
                   component: './list/card-list',
@@ -229,17 +229,17 @@ export default {
             },
             {
               path: '/profile',
-              name: 'profile',
+              name: '详情页',
               icon: 'profile',
               routes: [
                 {
-                  name: 'basic',
+                  name: '基础详情页',
                   icon: 'smile',
                   path: '/profile/basic',
                   component: './profile/basic',
                 },
                 {
-                  name: 'advanced',
+                  name: '高级详情页',
                   icon: 'smile',
                   path: '/profile/advanced',
                   component: './profile/advanced',
@@ -247,18 +247,18 @@ export default {
               ],
             },
             {
-              name: 'result',
+              name: '结果页',
               icon: 'CheckCircleOutlined',
               path: '/result',
               routes: [
                 {
-                  name: 'success',
+                  name: '成功页',
                   icon: 'smile',
                   path: '/result/success',
                   component: './result/success',
                 },
                 {
-                  name: 'fail',
+                  name: '失败页',
                   icon: 'smile',
                   path: '/result/fail',
                   component: './result/fail',
@@ -266,7 +266,7 @@ export default {
               ],
             },
             {
-              name: 'exception',
+              name: '异常页',
               icon: 'warning',
               path: '/exception',
               routes: [
@@ -291,18 +291,18 @@ export default {
               ],
             },
             {
-              name: 'account',
+              name: '个人页',
               icon: 'user',
               path: '/account',
               routes: [
                 {
-                  name: 'center',
+                  name: '个人中心',
                   icon: 'smile',
                   path: '/account/center',
                   component: './account/center',
                 },
                 {
-                  name: 'settings',
+                  name: '个人设置',
                   icon: 'smile',
                   path: '/account/settings',
                   component: './account/settings',
@@ -310,24 +310,24 @@ export default {
               ],
             },
             {
-              name: 'editor',
+              name: '图形编辑器',
               icon: 'highlight',
               path: '/editor',
               routes: [
                 {
-                  name: 'flow',
+                  name: '流程编辑器',
                   icon: 'smile',
                   path: '/editor/flow',
                   component: './editor/flow',
                 },
                 {
-                  name: 'mind',
+                  name: '脑图编辑器',
                   icon: 'smile',
                   path: '/editor/mind',
                   component: './editor/mind',
                 },
                 {
-                  name: 'koni',
+                  name: '拓扑编辑器',
                   icon: 'smile',
                   path: '/editor/koni',
                   component: './editor/koni',
