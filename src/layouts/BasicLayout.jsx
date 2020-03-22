@@ -7,15 +7,17 @@ import ProLayout, { DefaultFooter, SettingDrawer } from '@ant-design/pro-layout'
 import React, { useEffect } from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { GithubOutlined, SmileOutlined, HeartOutlined } from '@ant-design/icons';
+import { Result, Button, version } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-// import globalConfig from '../../config/config';
 
-// const RouterConfig = globalConfig.routes;
+const IconMap = {
+  smile: <SmileOutlined />,
+  heart: <HeartOutlined />,
+};
 
 const noMatch = (
   <Result
@@ -42,7 +44,15 @@ const noMatch = (
 // };
 
 const menuDataRender = menuList => {
-  menuList.map(item => ({ ...item, children: item.children ? menuDataRender(item.children) : [] }));
+  menuList.map(({ icon, children, ...item }) => {
+    const localItem = {
+      ...item,
+      icon: IconMap[icon],
+      children: item.children ? menuDataRender(item.children) : [],
+    };
+    return localItem;
+  });
+  // console.log("\n\n\n晕死了，ant-design-pro框架太笨重了  "+JSON.stringify(menuList));
   return menuList;
 };
 
@@ -52,7 +62,7 @@ const defaultFooterDom = (
     links={[
       {
         key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
+        title: `Ant Design Pro版本 ${version}`,
         href: 'https://pro.ant.design',
         blankTarget: true,
       },
@@ -101,6 +111,7 @@ const footerRender = () => {
 const BasicLayout = props => {
   const {
     dispatch,
+    menuData,
     children,
     settings,
     location = {
@@ -115,6 +126,9 @@ const BasicLayout = props => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
+      });
+      dispatch({
+        type: 'menu/queryCurrentUserMenu',
       });
     }
   }, []);
@@ -169,8 +183,8 @@ const BasicLayout = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={menuDataRender} // 第一个menuDataRender的类型是一个函数，第二个menuDataRender的类型也是一个函数，这句的意思是把当前页面定义的menuDataRender函数赋值给ProLayout空间的menuDataRender函数
-        // menuDataRender={() => loopMenuItem(defaultMenus)}
+        menuDataRender={() => menuDataRender(menuData)} // 第一个menuDataRender的类型是一个函数，第二个menuDataRender的类型也是一个函数，这句的意思是把当前页面定义的menuDataRender函数赋值给ProLayout空间的menuDataRender函数
+        // menuDataRender={menuDataRender}
         rightContentRender={() => <RightContent />}
         {...props}
         {...settings}
@@ -192,10 +206,20 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ global, settings, menu }) => ({
   collapsed: global.collapsed,
   settings,
+  menuData: menu.data,
 }))(BasicLayout);
+
+// export default connect(({ global, settings, menu }) => {
+//   console.log("connect的菜单数据==>>>  "+JSON.stringify(menu.data));
+//   return {
+//   collapsed: global.collapsed,
+//   settings,
+//   menuData: menu.data,
+// };
+// })(BasicLayout);
 
 /** 写法二，不写return，用括号()替换把{ return }; */
 // export default connect(({ global, settings }) => (
