@@ -7,6 +7,7 @@ const MenuModel = {
   },
 
   effects: {
+    // *queryCurrentUserMenu({ payload }, { call, put }) {
     *queryCurrentUserMenu(_, { call, put }) {
       const menuData = yield call(queryCurrentUserMenu);
       // console.log("后端请求的菜单数据==>>>  "+JSON.stringify(menuData)); // 有console时，git commit的eslint语法校验不通过
