@@ -221,6 +221,15 @@ export default connect(({ global, settings, menu }) => ({
 // };
 // })(BasicLayout);
 
+// export default connect(({ global, settings, menu }) => {
+//   console.log("connect的菜单数据==>>>  "+JSON.stringify(menu.data));
+//   return {
+//   collapsed: global.collapsed,
+//   settings,
+//   menuData: menu.data,
+// };
+// })(BasicLayout);
+
 /** 写法二，不写return，用括号()替换把{ return }; */
 // export default connect(({ global, settings }) => (
 //   {
