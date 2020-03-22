@@ -13,47 +13,9 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-import { SmileOutlined, HeartOutlined } from '@ant-design/icons';
+// import globalConfig from '../../config/config';
 
-const IconMap = {
-  smile: <SmileOutlined />,
-  heart: <HeartOutlined />,
-};
-
-const defaultMenus = [
-  {
-    path: '/',
-    name: 'welcome',
-    icon: 'smile',
-    children: [
-      {
-        path: '/welcome',
-        name: 'one',
-        icon: 'smile',
-        children: [
-          {
-            path: '/welcome/welcome',
-            name: 'two',
-            icon: 'smile',
-            exact: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: '/demo',
-    name: 'demo',
-    icon: 'heart',
-  },
-];
-
-const loopMenuItem = (menus) =>
-  menus.map(({ icon, children, ...item }) => ({
-    ...item,
-    icon: icon && IconMap[icon],
-    children: children && loopMenuItem(children),
-  }));
+// const RouterConfig = globalConfig.routes;
 
 const noMatch = (
   <Result
@@ -71,12 +33,19 @@ const noMatch = (
  * use Authorized check all menu item
  */
 
-const menuDataRender = menuList => {
-  menuList.map(item => {
+// const menuDataRender = menuList => {
+//   menuList.map(item => {
+//     return { ...item, children: item.children ? menuDataRender(item.children) : [] };
+//     // return Authorized.check(item.authority, localItem, null);
+//   });
+// return menuList;
+// };
+
+const menuDataRender = function(menuList) {
+  menuList.map(function(item) {
     return { ...item, children: item.children ? menuDataRender(item.children) : [] };
-    // return Authorized.check(item.authority, localItem, null);
-  })
-return menuList;
+  });
+  return menuList;
 };
 
 const defaultFooterDom = (
@@ -179,7 +148,7 @@ const BasicLayout = props => {
         )}
         onCollapse={handleMenuCollapse}
         menuItemRender={(menuItemProps, defaultDom) => {
-          console.log("\n\nmenuItemRender==>>> "+JSON.stringify(menuItemProps));
+          // console.log("\n\nmenuItemRender==>>> "+JSON.stringify(menuItemProps));
           if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
             return defaultDom;
           }
@@ -202,7 +171,7 @@ const BasicLayout = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={menuDataRender}
+        menuDataRender={menuDataRender} // 第一个menuDataRender的类型是一个函数，第二个menuDataRender的类型也是一个函数，这句的意思是把当前页面定义的menuDataRender函数赋值给ProLayout空间的menuDataRender函数
         // menuDataRender={() => loopMenuItem(defaultMenus)}
         rightContentRender={() => <RightContent />}
         {...props}
@@ -225,13 +194,10 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => {
-  return {
-    collapsed: global.collapsed,
-    settings,
-  };
-})(BasicLayout);
-
+export default connect(({ global, settings }) => ({
+  collapsed: global.collapsed,
+  settings,
+}))(BasicLayout);
 
 /** 写法二，不写return，用括号()替换把{ return }; */
 // export default connect(({ global, settings }) => (
