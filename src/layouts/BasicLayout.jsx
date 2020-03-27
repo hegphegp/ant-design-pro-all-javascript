@@ -45,11 +45,12 @@ const noMatch = (
 // };
 
 // 这种写法扑街了，自己死了都不知道什么回事
+// 直接返回 return menuList.map()  而不是返回 return menuList;
 // const menuDataRender = menuList => {
-//   menuList.map(({ icon, children, ...item }) => {
+//   menuList.map(({ icon, ...item }) => {
 //     const localItem = {
 //       ...item,
-//       icon: IconMap[icon],
+//       icon: icon && IconMap[icon],
 //       children: item.children ? menuDataRender(item.children) : [],
 //     };
 //     return localItem;
@@ -57,12 +58,22 @@ const noMatch = (
 //   return menuList;
 // };
 
-const menuDataRender = menuList =>
-  menuList.map(({ icon, children, ...item }) => ({
-    ...item,
-    icon: icon && IconMap[icon],
-    children: children ? menuDataRender(children) : [],
-  }));
+const menuDataRender = menuList => {
+  return menuList.map(({ icon, ...item }) => {
+    const localItem = {
+      ...item,
+      icon: icon && IconMap[icon],
+      children: item.children ? menuDataRender(item.children) : [],
+    };
+    return localItem;
+  });
+};
+
+// const menuDataRender = menuList => {
+//   return menuList.map(({ icon, children, ...item }) => {
+//     return { ...item, icon: icon && IconMap[icon], children: children ? menuDataRender(children) : []};
+//   });
+// }
 
 const defaultFooterDom = (
   <DefaultFooter
