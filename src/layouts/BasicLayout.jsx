@@ -7,7 +7,7 @@ import ProLayout, { DefaultFooter, SettingDrawer } from '@ant-design/pro-layout'
 import React, { useEffect } from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { GithubOutlined, SmileOutlined, HeartOutlined } from '@ant-design/icons';
+import { GithubOutlined, SmileOutlined, HeartOutlined, TableOutlined } from '@ant-design/icons';
 import { Result, Button, version } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -17,6 +17,7 @@ import logo from '../assets/logo.svg';
 const IconMap = {
   smile: <SmileOutlined />,
   heart: <HeartOutlined />,
+  table: <TableOutlined />,
 };
 
 const noMatch = (
@@ -43,18 +44,25 @@ const noMatch = (
 // return menuList;
 // };
 
-const menuDataRender = menuList => {
-  menuList.map(({ icon, children, ...item }) => {
-    const localItem = {
-      ...item,
-      icon: IconMap[icon],
-      children: item.children ? menuDataRender(item.children) : [],
-    };
-    return localItem;
-  });
-  // console.log("\n\n\n晕死了，ant-design-pro框架太笨重了  "+JSON.stringify(menuList));
-  return menuList;
-};
+// 这种写法扑街了，自己死了都不知道什么回事
+// const menuDataRender = menuList => {
+//   menuList.map(({ icon, children, ...item }) => {
+//     const localItem = {
+//       ...item,
+//       icon: IconMap[icon],
+//       children: item.children ? menuDataRender(item.children) : [],
+//     };
+//     return localItem;
+//   });
+//   return menuList;
+// };
+
+const menuDataRender = menuList =>
+  menuList.map(({ icon, children, ...item }) => ({
+    ...item,
+    icon: icon && IconMap[icon],
+    children: children ? menuDataRender(children) : [],
+  }));
 
 const defaultFooterDom = (
   <DefaultFooter
