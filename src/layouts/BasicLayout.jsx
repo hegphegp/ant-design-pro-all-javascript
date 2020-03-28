@@ -56,7 +56,7 @@ const menuDataRender = menuList => {
   return menuList.map(({ icon, ...item }) => {
     const localItem = {
       ...item,
-      icon: icon && <Icon type={icon} />,
+      icon: icon ? icon && <Icon type={icon} /> : <Icon type="smile" />,
       children: item.children ? menuDataRender(item.children) : [],
     };
     return localItem;
