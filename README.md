@@ -31,19 +31,124 @@ npm run i18n-remove
 rm -rf `find . -not -path "./node_modules/*" -name locales`
 ```
 
-- 发现 settings 变量没有声明，却在 connect 参数直接使用，在 connect 中打印，发现取值是
+### 删掉所有的
 
 ```
-{"navTheme":"dark","primaryColor":"#1890ff","layout":"sidemenu","contentWidth":"Fluid","fixedHeader":false,"autoHideHeader":false,"fixSiderbar":false,"colorWeak":false,"menu":{"locale":true},"title":"Ant Design Pro","pwa":false,"iconfontUrl":""}
+删除 config/config.js的routes变量中所有关于权限认证的内容
 ```
 
-- 发现 global 变量没有声明，却在 connect 参数直接使用，在 connect 中打印，发现取值是
+- 在 antd 中 src/models/目录的所有 model 的 namespace 的名称都可以作为 connect({})的参数使用，同时 src/pages/模块/子子孙孙模块/可以创建 model.js 文件，该文件的 namespace 是局部的，可以在当前模块使用
+
+#### 在 antd 添加一个路由模块的步骤
+
+- 1. 在 config/config.js 添加 routes 路由信息 path 与对应的 component，其中 component 的控件的起始对照路径是 src/pages
+- 2. 是否需要创建 model，在什么情况下需要创建，什么情况下不需要创建，好像都是在 model.js 调用后端接口。有调用后端接口的，都要有 model.js 并写到文件里面。获取左侧菜单有调用后端接口时，有创建 model，并通过 connect({})引入
+- 3. 在 src/pages 下面单独创建一个模块文件夹，想通过动态的列表配置 json 自动渲染列表，想通过动态的表单配置 json 自动渲染表单
+
+#### model 参数的使用步骤
+
+- 1. 在 connect({})的参数引入对应的 namespace 名称，这些参数会赋值给该页面的 props 参数
 
 ```
-{"collapsed":false,"notices":[{"id":"000000001","avatar":"https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png","title":"你收到了 14 份新周报","datetime":"2017-08-09","type":"notification"},{"id":"000000002","avatar":"https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png","title":"你推荐的 曲妮妮 已通过第三轮面试","datetime":"2017-08-08","type":"notification"},{"id":"000000003","avatar":"https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png","title":"这种模板可以区分多种通知类型","datetime":"2017-08-07","read":true,"type":"notification"},{"id":"000000004","avatar":"https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png","title":"左侧图标用于区分不同的类型","datetime":"2017-08-07","type":"notification"},{"id":"000000005","avatar":"https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png","title":"内容不要超过两行字，超出时自动截断","datetime":"2017-08-07","type":"notification"},{"id":"000000006","avatar":"https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg","title":"曲丽丽 评论了你","description":"描述信息描述信息描述信息","datetime":"2017-08-07","type":"message","clickClose":true},{"id":"000000007","avatar":"https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg","title":"朱偏右 回复了你","description":"这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像","datetime":"2017-08-07","type":"message","clickClose":true},{"id":"000000008","avatar":"https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg","title":"标题","description":"这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像","datetime":"2017-08-07","type":"message","clickClose":true},{"id":"000000009","title":"任务名称","description":"任务需要在 2017-01-12 20:00 前启动","extra":"未开始","status":"todo","type":"event"},{"id":"000000010","title":"第三方紧急代码变更","description":"冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务","extra":"马上到期","status":"urgent","type":"event"},{"id":"000000011","title":"信息安全考试","description":"指派竹尔于 2017-01-09 前完成更新并发布","extra":"已耗时 8 天","status":"doing","type":"event"},{"id":"000000012","title":"ABCD 版本发布","description":"冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务","extra":"进行中","status":"processing","type":"event"}]}
+  export default connect(({ settings, menu }) => ({
+  settings,
+  menuData: menu.data,
+}))(BasicLayout);
 ```
 
-- 看到头痛后，看到神经错乱后，好像发现 connect({}) 中的变量都是 namespace 同名的参数，好像都是 dvajs 中 namespace 中同名的参数变量，他大爷的，看了这么多视频教程，那些傻逼都讲 dvajs 的数据逻辑，每一个讲 connect 的参数来自于哪里，全是傻逼
+- 2. 在该页面的 props 参数读取这些名称的变量，然后在页面直接使用这些变量
+
+```
+const BasicLayout = props => {
+  const {
+    dispatch,
+    menuData,
+    children,
+    settings,
+  } = props;
+```
+
+- 3. 在 useEffect() 函数中首次加载页面时，触发调用后端接口赋值的 model.js 对应的 namespace 和方法
+
+```
+import React, { useEffect } from 'react';
+  useEffect(() => {
+    if (dispatch) {
+      dispatch({
+        type: 'user/fetchCurrent',  // 打开该页面发现有调用user/fetchCurrent对应的 /api/currentUser 接口
+      });
+      dispatch({
+        type: 'menu/queryCurrentUserMenu',  // 打开该页面发现有调用menu/queryCurrentUserMenu对应的菜单接口
+      });
+    }
+  }, []);
+```
+
+- 4. 手动调用 model 的 effects 模块的方法
+
+```
+const handleMenuCollapse = payload => {
+  if (dispatch) {
+    dispatch({
+      type: 'global/changeLayoutCollapsed',
+      payload,
+    });
+  }
+};
+```
+
+- 5. 在 model 的 js 文件里面定义 namespace，该文件分为 3 大块，namespace 模块，effects 模块，reducers 模块。
+  - effects 模块用于调用 api 接口，主要写法是 yield call(queryUsers); ，调用接口后，用 yield put 方式调用 reducers 模块的方法
+  - reducers 模块用于 return 数据，return 的数据格式与 namespace 中 state 的数据一致
+
+```
+import { queryCurrent, query as queryUsers } from '@/services/user';
+const UserModel = {
+  namespace: 'user',
+  state: {
+    currentUser: {},
+  },
+  effects: {
+    *fetch(_, { call, put }) {
+      const response = yield call(queryUsers);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+    },
+
+    *fetchCurrent(_, { call, put }) {
+      const response = yield call(queryCurrent);
+      yield put({
+        type: 'saveCurrentUser',
+        payload: response,
+      });
+    },
+  },
+  reducers: {
+    saveCurrentUser(state, action) {
+      return { ...state, currentUser: action.payload || {} };
+    },
+
+    changeNotifyCount(
+      state = {
+        currentUser: {},
+      },
+      action,
+    ) {
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          notifyCount: action.payload.totalCount,
+          unreadCount: action.payload.unreadCount,
+        },
+      };
+    },
+  },
+};
+export default UserModel;
+```
 
 #### 问题
 

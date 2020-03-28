@@ -196,8 +196,8 @@ const BasicLayout = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={() => menuDataRender(menuData)} // 第一个menuDataRender的类型是一个函数，第二个menuDataRender的类型也是一个函数，这句的意思是把当前页面定义的menuDataRender函数赋值给ProLayout空间的menuDataRender函数
-        // menuDataRender={menuDataRender}
+        menuDataRender={() => menuDataRender(menuData)}
+        // menuDataRender={menuDataRender} // 第一个menuDataRender的类型是一个函数，第二个menuDataRender的类型也是一个函数，这句的意思是把当前页面定义的menuDataRender函数作为ProLayout空间的menuDataRender函数
         rightContentRender={() => <RightContent />}
         {...props}
         {...settings}
@@ -219,8 +219,7 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings, menu }) => ({
-  collapsed: global.collapsed,
+export default connect(({ settings, menu }) => ({
   settings,
   menuData: menu.data,
 }))(BasicLayout);
