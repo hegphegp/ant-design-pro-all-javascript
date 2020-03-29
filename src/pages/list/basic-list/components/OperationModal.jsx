@@ -1,157 +1,37 @@
-import React, { useEffect } from 'react';
-import moment from 'moment';
-import { Modal, Result, Button, Form, DatePicker, Input, Select } from 'antd';
-import styles from '../style.less';
+import React, { useState } from 'react';
+import { Modal } from 'antd';
 
-const { TextArea } = Input;
-const formLayout = {
-  labelCol: {
-    span: 7,
-  },
-  wrapperCol: {
-    span: 13,
-  },
-};
+import FormRender from 'form-render/lib/antd';
+import SCHEMA from './schema.json';
 
 const OperationModal = props => {
-  const [form] = Form.useForm();
-  const { done, visible, current, onDone, onCancel, onSubmit } = props;
-  useEffect(() => {
-    if (form && !visible) {
-      form.resetFields();
-    }
-  }, [props.visible]);
-  useEffect(() => {
-    if (current) {
-      form.setFieldsValue({
-        ...current,
-        createdAt: current.createdAt ? moment(current.createdAt) : null,
-      });
-    }
-  }, [props.current]);
+  const [formData, setData] = useState({});
+  const [valid, setValid] = useState([]);
 
-  const handleSubmit = () => {
-    if (!form) return;
-    form.submit();
+  const onSubmit = () => {
+    if (valid.length > 0) {
+      alert(`校验未通过字段：${valid.toString()}`);
+    } else {
+      alert(JSON.stringify(formData, null, 2));
+    }
   };
 
-  const handleFinish = values => {
-    if (onSubmit) {
-      onSubmit(values);
-    }
-  };
+  const { done, visible, current, onCancel, onDone } = props;
 
   const modalFooter = done
-    ? {
-        footer: null,
-        onCancel: onDone,
-      }
-    : {
-        okText: '保存',
-        onOk: handleSubmit,
-        onCancel,
-      };
-
-  const getModalContent = () => {
-    if (done) {
-      return (
-        <Result
-          status="success"
-          title="操作成功"
-          subTitle="一系列的信息描述，很短同样也可以带标点。"
-          extra={
-            <Button type="primary" onClick={onDone}>
-              知道了
-            </Button>
-          }
-          className={styles.formResult}
-        />
-      );
-    }
-
-    return (
-      <Form {...formLayout} form={form} onFinish={handleFinish}>
-        <Form.Item
-          name="title"
-          label="任务名称"
-          rules={[
-            {
-              required: true,
-              message: '请输入任务名称',
-            },
-          ]}
-        >
-          <Input placeholder="请输入" />
-        </Form.Item>
-        <Form.Item
-          name="createdAt"
-          label="开始时间"
-          rules={[
-            {
-              required: true,
-              message: '请选择开始时间',
-            },
-          ]}
-        >
-          <DatePicker
-            showTime
-            placeholder="请选择"
-            format="YYYY-MM-DD HH:mm:ss"
-            style={{
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          name="owner"
-          label="任务负责人"
-          rules={[
-            {
-              required: true,
-              message: '请选择任务负责人',
-            },
-          ]}
-        >
-          <Select placeholder="请选择">
-            <Select.Option value="付晓晓">付晓晓</Select.Option>
-            <Select.Option value="周毛毛">周毛毛</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="subDescription"
-          label="产品描述"
-          rules={[
-            {
-              message: '请输入至少五个字符的产品描述！',
-              min: 5,
-            },
-          ]}
-        >
-          <TextArea rows={4} placeholder="请输入至少五个字符" />
-        </Form.Item>
-      </Form>
-    );
-  };
+    ? { footer: null, onCancel: onDone }
+    : { okText: '保存', onOk: onSubmit, onCancel };
 
   return (
     <Modal
+      // getContainer={false}
       title={done ? null : `任务${current ? '编辑' : '添加'}`}
-      className={styles.standardListForm}
-      width={640}
-      bodyStyle={
-        done
-          ? {
-              padding: '72px 0',
-            }
-          : {
-              padding: '28px 0 0',
-            }
-      }
+      width={1200}
       destroyOnClose
       visible={visible}
       {...modalFooter}
     >
-      {getModalContent()}
+      <FormRender {...SCHEMA} formData={formData} onChange={setData} onValidate={setValid} />
     </Modal>
   );
 };
